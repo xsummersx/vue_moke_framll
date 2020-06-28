@@ -55,7 +55,8 @@
               <li v-for="(cart,index) in cartList" v-bind:key="index">
                 <div class="cart-tab-1">
                   <div class="cart-item-check">
-                    <a href="javascipt:;" class="checkbox-btn item-check-btn" v-bind:class="{'checked':cart.checked}">
+                    <a href="javascipt:;" @click="editCart('check',cart)" class="checkbox-btn item-check-btn"
+                      v-bind:class="{'checked':cart.checked}">
                       <svg class="icon icon-ok">
                         <use xlink:href="#icon-ok"></use>
                       </svg>
@@ -75,15 +76,15 @@
                   <div class="item-quantity">
                     <div class="select-self select-self-open">
                       <div class="select-self-area">
-                        <a class="input-sub">-</a>
+                        <a class="input-sub" v-on:click="editCart('minus',cart)">-</a>
                         <span class="select-ipt">{{cart.productNum}}</span>
-                        <a class="input-add">+</a>
+                        <a class="input-add" v-on:click="editCart('add',cart)">+</a>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="cart-tab-4">
-                  <div class="item-price-total">￥{{cart.productPrice * cart.productNum}}元</div>
+                  <div class="item-price-total">{{cart.productPrice * cart.productNum | currency}}</div>
                 </div>
                 <div class="cart-tab-5">
                   <div class="cart-item-opration">
@@ -147,13 +148,33 @@ export default {
   mounted () {
     this.init();
   },
+  //过滤器
+  filters: {
+    currency (value) {
+      if (!value) {
+        return '0.00';
+      }
+      return '￥' + value.toFixed(2) + '元';
+    }
+  },
   methods: {
+    //初始化數據
     init () {
       this.axios.get("/mock/cart.json").then((response) => {
         console.log(response);
         let res = response.data;
         this.cartList = res.data;
       })
+    },
+    //修改數量
+    editCart (type, item) {
+      if (type == 'add') {
+        item.productNum++;
+      } else if (type == 'minus') {
+        item.productNum--;
+      } else {
+        item.checked = !item.checked;
+      }
     }
   }
 }
