@@ -1,13 +1,13 @@
 {
-  "code":0,
-  "data":[
+  "code": 0,
+  "data": [
     {
       "productId": "100001",
       "productName": "小度人工智能音箱",
       "productPrice": 99,
       "productNum": 2,
       "productImage": "1.jpg",
-      "checked":false
+      "checked": false
     },
     {
       "productId": "100002",
@@ -50,5 +50,5 @@
       "checked": true
     }
   ],
-  "message":""
+  "message": ""
 }

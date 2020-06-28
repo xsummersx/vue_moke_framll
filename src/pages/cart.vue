@@ -52,38 +52,38 @@
               </ul>
             </div>
             <ul class="cart-item-list">
-              <li>
+              <li v-for="(cart,index) in cartList" v-bind:key="index">
                 <div class="cart-tab-1">
                   <div class="cart-item-check">
-                    <a href="javascipt:;" class="checkbox-btn item-check-btn">
+                    <a href="javascipt:;" class="checkbox-btn item-check-btn" v-bind:class="{'checked':cart.checked}">
                       <svg class="icon icon-ok">
                         <use xlink:href="#icon-ok"></use>
                       </svg>
                     </a>
                   </div>
                   <div class="cart-item-pic">
-                    <img src="/imgs/1.jpg" />
+                    <img v-bind:src="'/imgs/'+cart.productImage" />
                   </div>
                   <div class="cart-item-title">
-                    <div class="item-name"></div>
+                    <div class="item-name">{{cart.productName}}</div>
                   </div>
                 </div>
                 <div class="cart-tab-2">
-                  <div class="item-price"></div>
+                  <div class="item-price">{{cart.productPrice}}</div>
                 </div>
                 <div class="cart-tab-3">
                   <div class="item-quantity">
                     <div class="select-self select-self-open">
                       <div class="select-self-area">
                         <a class="input-sub">-</a>
-                        <span class="select-ipt">0</span>
+                        <span class="select-ipt">{{cart.productNum}}</span>
                         <a class="input-add">+</a>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="cart-tab-4">
-                  <div class="item-price-total">25</div>
+                  <div class="item-price-total">￥{{cart.productPrice * cart.productNum}}元</div>
                 </div>
                 <div class="cart-tab-5">
                   <div class="cart-item-opration">
@@ -136,13 +136,25 @@ export default {
   name: 'cart',
   data () {
     return {
-
+      cartList: []
     }
   },
   components: {
     NavHeader,
     NavFeets,
     NavModal
+  },
+  mounted () {
+    this.init();
+  },
+  methods: {
+    init () {
+      this.axios.get("/mock/cart.json").then((response) => {
+        console.log(response);
+        let res = response.data;
+        this.cartList = res.data;
+      })
+    }
   }
 }
 
