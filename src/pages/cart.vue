@@ -88,7 +88,7 @@
                 </div>
                 <div class="cart-tab-5">
                   <div class="cart-item-opration">
-                    <a href="javascript:;" class="item-edit-btn">
+                    <a href="javascript:;" class="item-edit-btn" @click="delBtn(index)">
                       <svg class="icon icon-del">
                         <use xlink:href="#icon-del"></use>
                       </svg>
@@ -126,7 +126,16 @@
       </div>
     </div>
     <nav-feets></nav-feets>
-    <nav-modal></nav-modal>
+    <nav-modal v-bind:mdShow="modalConirm" v-on:close="closeModal">
+      <p slot="message">确定要删除这条记录吗？</p>
+      <template v-slot:message>
+        <p>确定要删除这条记录吗？</p>
+      </template>
+      <template v-slot:btnGroup>
+        <a class="btn btn--m btn--red" href="javasript:;" @click="delCart">确认</a>
+        <a class="btn btn--m" href="javasript:;" @click="modalConirm=false">取消</a>
+      </template>
+    </nav-modal>
   </div>
 </template>
 <script>
@@ -137,7 +146,9 @@ export default {
   name: 'cart',
   data () {
     return {
-      cartList: []
+      cartList: [],
+      modalConirm: false,
+      delItem: {},
     }
   },
   components: {
@@ -175,6 +186,25 @@ export default {
       } else {
         item.checked = !item.checked;
       }
+    },
+    //删除数据
+    delBtn (index) {
+      this.delItem = index;
+      console.log(this.delItem)
+      this.modalConirm = true;
+    },
+    closeModal () {
+      this.modalConirm = false;
+    },
+    //真正删除数据
+    delCart () {
+      let inx = this.delItem;
+      this.cartList.forEach((item, index) => {
+        if (index == inx) {
+          this.cartList.splice(index, 1);
+          this.modalConirm = false;
+        }
+      })
     }
   }
 }
