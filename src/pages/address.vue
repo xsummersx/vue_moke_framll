@@ -143,13 +143,12 @@ export default {
   name: 'addr',
   data () {
     return {
-
     }
   },
   components: {
     NavHeader,
     NavFeets,
     NavModal
-  }
+  },
 }
 </script>
