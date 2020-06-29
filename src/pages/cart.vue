@@ -103,8 +103,8 @@
           <div class="cart-foot-inner">
             <div class="cart-foot-l">
               <div class="item-all-check">
-                <a>
-                  <span class="checkbox-btn item-check-btn">
+                <a href="javascript:;" @click="toggleAll()">
+                  <span class="checkbox-btn item-check-btn" v-bind:class="{'check':checkAllflag}">
                     <svg class="icon icon-ok">
                       <use xlink:href="#icon-ok" />
                     </svg>
@@ -115,10 +115,10 @@
             </div>
             <div class="cart-foot-r">
               <div class="item-total">
-                总价: <span class="total-price">12</span>
+                总价: <span class="total-price">{{total}}</span>
               </div>
               <div class="btn-wrap">
-                <a class="btn btn--red">结算</a>
+                <a class="btn btn--red" v-bind:class="{'btn--dis':!checkCount}" @click="btnCheckout">结算</a>
               </div>
             </div>
           </div>
@@ -156,6 +156,30 @@ export default {
     NavFeets,
     NavModal
   },
+  computed: {
+    checkAllflag () {
+      //当数组中所有对象都返回true的时候，整体才会返回true
+      return this.cartList.every((item) => {
+        return item.checked;
+      })
+    },
+    //总金额
+    total () {
+      let money = 0
+      this.cartList.forEach((item) => {
+        if (item.checked) {
+          money += item.productPrice * item.productNum;
+        }
+      })
+      return money;
+    },
+    //判断购物车是否有选中的商品
+    checkCount () {
+      return this.cartList.some((item) => {
+        return item.checked;
+      })
+    }
+  },
   mounted () {
     this.init();
   },
@@ -181,7 +205,7 @@ export default {
     editCart (type, item) {
       if (type == 'add') {
         item.productNum++;
-      } else if (type == 'minus') {
+      } else if (type == 'minus' && item.productNum > 0) {
         item.productNum--;
       } else {
         item.checked = !item.checked;
@@ -205,8 +229,22 @@ export default {
           this.modalConirm = false;
         }
       })
+    },
+    //全选
+    toggleAll () {
+      let flag = !this.checkAllflag;
+      this.cartList.forEach((item) => {
+        item.checked = flag;
+      })
+    },
+    //结算
+    btnCheckout () {
+      if (this.checkCount == true) {
+        this.$router.push({
+          path: '/address',
+        })
+      }
     }
   }
 }
-
 </script>
