@@ -127,7 +127,6 @@
     </div>
     <nav-feets></nav-feets>
     <nav-modal v-bind:mdShow="modalConirm" v-on:close="closeModal">
-      <p slot="message">确定要删除这条记录吗？</p>
       <template v-slot:message>
         <p>确定要删除这条记录吗？</p>
       </template>

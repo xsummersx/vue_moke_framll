@@ -99,7 +99,8 @@
             </div>
 
             <div class="shipping-addr-more">
-              <a class="addr-more-btn up-down-btn">
+              <a class="addr-more-btn up-down-btn" href="javascript:;" @click="more()"
+                v-bind:class="{'open':limit !=3}">
                 查看更多
                 <i class="i-up-down">
                   <i class="i-up-down-l"></i>
@@ -127,12 +128,19 @@
             </div>
           </div>
           <div class="next-btn-wrap">
-            <a class="btn btn--m btn--red">下一步</a>
+            <a class="btn btn--m btn--red" herf="javascript:;" @click="thisShow=true">下一步</a>
           </div>
         </div>
       </div>
     </div>
-    <nav-modal></nav-modal>
+    <nav-modal v-bind:mdShow="thisShow" v-on:close="thisShow=false">
+      <template v-slot:message>
+        <p>准备下一步</p>
+      </template>
+      <template v-slot:btnGroup>
+        <a class="btn btn--m" href="javasript:;" @click="thisShow=false">关闭</a>
+      </template>
+    </nav-modal>
     <nav-feets></nav-feets>
   </div>
 </template>
@@ -149,6 +157,7 @@ export default {
       thisCheck: 0,
       //默认显示个数
       limit: 3,
+      thisShow: false,
     }
   },
   components: {
@@ -158,11 +167,7 @@ export default {
   },
   computed: {
     adList () {
-      return this.List.map((item, index) => {
-        if (this.limit <= index) {
-          this.List.slice(index, 1);
-        }
-      })
+      return this.List.slice(0, this.limit);
     }
   },
   mounted () {
@@ -199,6 +204,13 @@ export default {
           this.List.splice(index, 1);
         }
       })
+    },
+    more () {
+      if (this.limit == 3) {
+        this.limit = this.List.length;
+      } else {
+        this.limit = 3;
+      }
     }
   }
 }
