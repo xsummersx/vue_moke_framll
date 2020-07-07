@@ -126,7 +126,7 @@
       </div>
     </div>
     <nav-feets></nav-feets>
-    <nav-modal v-bind:mdShow="modalConirm" v-on:close="closeModal">
+    <nav-modal v-bind:mdShow="modalConirm" v-bind:obj="objectStr" v-on:close="closeModal">
       <template v-slot:message>
         <p>确定要删除这条记录吗？</p>
       </template>
@@ -148,6 +148,10 @@ export default {
       cartList: [],
       modalConirm: false,
       delItem: {},
+      objectStr: {
+        id: 1,
+        name: 'cc'
+      }
     }
   },
   components: {
@@ -216,8 +220,9 @@ export default {
       console.log(this.delItem)
       this.modalConirm = true;
     },
-    closeModal () {
+    closeModal (gb) {
       this.modalConirm = false;
+      console.log(gb)
     },
     //真正删除数据
     delCart () {

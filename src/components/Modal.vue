@@ -22,11 +22,17 @@
 export default {
   name: 'v-modal',
   props: {
-    'mdShow': Boolean
+    'mdShow': Boolean,
+    'obj': Object
+  },
+  mounted () {
+    console.log(this.obj)
   },
   methods: {
     closeModal () {
-      this.$emit('close');
+      this.$emit('close', {
+        gb: 1
+      });
     }
   }
 }
